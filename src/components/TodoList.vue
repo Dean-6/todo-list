@@ -5,6 +5,9 @@
           <label v-bind:for="todoItem.item" class="list_label">
               <p class="list_text">{{ todoItem.item }}</p>
           </label>
+          <button class="list__delete" v-on:click="removeTodo(todoItem, index)">
+            <div class="blind">Delete</div>
+          </button>
           <p class="list_date">{{ todoItem.date }}</p>
           <button class="list_delete">Delete</button>
       </li>
@@ -13,6 +16,7 @@
 
 <script>
 export default {
+    props: ["propsdata"],
     data() {
         return {
             todoItems: []
@@ -31,6 +35,11 @@ export default {
         toggleComplete(todoItem) {
             todoItem.completed = !todoItem.completed;
             localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+        },
+        removeTodo(todoItem, index) {
+            localStorage.removeItem(todoItem.item);
+            this.todoItems.splice(index, 1);
+        }   
     }
 }
 </script>
