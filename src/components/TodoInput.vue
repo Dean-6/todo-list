@@ -1,6 +1,6 @@
 <template>
     <div class="add">
-        <input type="text" class="add_input" placeholder="Enter your task" v-modal="newTodoItem" v-on:keyup.enter="addTodoItem" />
+        <input type="text" class="add_input" placeholder="Enter your task" v-model="newTodoItem" v-on:keyup.enter="addTodoItem" />
         <button class="add_button" v-on:click="addTodoItem">
             <span class="blind">Add</span>
         </button>

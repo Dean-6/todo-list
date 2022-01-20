@@ -1,7 +1,8 @@
 <template>
     <div class="controller">
+        <br>
         <div class="select">
-            <label for="oder">Order</label>
+            <label for="oder">order         </label>
             <select name="order" id="order" class="selectbox">
                 <option value="date-asc">Date Ascending</option>
                 <option value="date-desc">Date Descending</option>
@@ -17,7 +18,8 @@
 export default {
     methods: {
         clearTodo() {
-            localStorage.clear();
+            // localStorage.clear();
+            this.$emit("clearAll");
         }
     }
 }

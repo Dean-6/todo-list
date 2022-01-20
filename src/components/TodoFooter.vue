@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer">Made by dean</footer>
+  <footer class="footer"></footer>
 </template>
 
 <script>

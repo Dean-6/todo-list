@@ -3,8 +3,14 @@
       <todo-header />
       <todo-title />
       <todo-input />
-      <todo-controller />
-      <todo-list v-bind:propsdata="todoItems" />
+      <todo-controller 
+        v-on:clearAll="clearAllItem"
+      />
+      <todo-list 
+        v-bind:propsdata="todoItems" 
+        v-on:removeItem="removeOneItem"
+        v-on:toggleItem="toggleOneItem"
+        />
       <todo-footer />
     </div>  
 </template>
@@ -41,6 +47,31 @@ export default {
           );
         // }
       }
+    }
+  },
+  methods: {
+    initList(){
+        if (localStorage.length > 0) {
+        for (let i = 0; i < localStorage.length; i++) {
+          // if (localStorage.key(i) !== "loglevel:webpack-dev-server") {
+            this.todoItems.push(
+              JSON.parse(localStorage.getItem(localStorage.key(i)))
+            );
+          // }
+        }
+      }
+    },
+    removeOneItem(todoItem, index) {
+      localStorage.removeItem(todoItem.item);
+      this.todoItems.splice(index, 1);
+    },
+    toggleOneItem(todoItem) {
+      todoItem.completed = !todoItem.completed;
+      localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+    },
+    clearAllItem() {
+      this.todoItems = [];
+      localStorage.clear();
     }
   }
 };

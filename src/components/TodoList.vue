@@ -9,7 +9,7 @@
             <div class="blind">Delete</div>
           </button>
           <p class="list_date">{{ todoItem.date }}</p>
-          <button class="list_delete">Delete</button>
+          <!-- <button class="list_delete">Delete</button> -->
       </li>
   </ul>
 </template>
