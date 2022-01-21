@@ -4,8 +4,8 @@
       <div>
         <label>{{ timestamp }}</label>
         <input type="text" placeholder="할 일" v-model="createTodoItem.newTodoItemData" />
-        <input type="text" placeholder="시작일" v-model="createTodoItem.newTodoItemStartDate" />
-        <input type="text" placeholder="종료일" v-model="createTodoItem.newTodoItemEndDate" />
+        <input type="date" placeholder="시작일" value="" v-model="createTodoItem.newTodoItemStartDate" />
+        <input type="date" placeholder="종료일" v-model="createTodoItem.newTodoItemEndDate" />
         <button v-on:click="addTodoItem">
           <span>Add</span>
         </button>
@@ -34,7 +34,7 @@
             </tr>
           </thead>
           <tbody>
-            <template v-for="(todoItem, index) in todoItems">
+            <!-- <template v-for="(todoItem, index) in todoItems">
             <tr v-show="!todoItem.hide" v-bind:key="index">
               <td><input type="checkbox" v-model="todoItem.hide"/></td>
               <td>{{ todoItem.registerDate }}</td>
@@ -44,6 +44,14 @@
               <td><button v-on:click="deleteTodoItem(index)">삭제</button></td>
               <td><button v-on:click="updateModal(todoItem, index)">수정</button></td>
             </tr>
+            </template> -->
+            <template v-for="(todoItem, index) in todoItems" >
+            <todo-list-node
+              v-bind:key="index"
+              v-bind:todoItem="todoItem"
+              v-on:delete="deleteTodoItem(index)"
+              v-on:update="updateModal(todoItem, index)"
+            ></todo-list-node>
             </template>
           </tbody>
         </table>
@@ -53,8 +61,8 @@
         <div>
           <p>update TO DO</p>
           <input type="text" v-model="upDataToDoItem.upDataData"/>
-          <input type="text" v-model="upDataToDoItem.upDateStartDeat"/>
-          <input type="text" v-model="upDataToDoItem.upDateEndDate"/>
+          <input type="date" v-model="upDataToDoItem.upDateStartDeat"/>
+          <input type="date" v-model="upDataToDoItem.upDateEndDate"/>
           <button v-on:click="updateTodoItem(upDataToDoItem)"><span>Update</span></button>
         </div>
       </div>
@@ -63,12 +71,17 @@
 
 <script>
 import getDate from "./assets/commonJS/getDate"
+import todoListNode from "./components/TodoListNode.vue"
 
 export default {
+  components: {
+    todoListNode,
+  },
   
   data() {
     return {
       timestamp: "",
+      today: "",
       showModal: false,
       createTodoItem: {
         newTodoItemData: "",
@@ -87,6 +100,7 @@ export default {
   },
   created() {
         this.timestamp = `${getDate().month}/${getDate().date} ${getDate().week}`;
+        
   },
   methods: {
 
