@@ -76,7 +76,7 @@
           <option value="보통">보통</option>
           <option value="높음">높음</option>
         </select>
-          <input type="text" v-model="upDataToDoItem.upDataRegisterDate"/>
+          <input type="text" disabled v-model="upDataToDoItem.upDataRegisterDate"/>
           <input type="text" v-model="upDataToDoItem.upDataData"/>
           <input type="date" v-model="upDataToDoItem.upDateStartDeat"/>
           <input type="date" v-model="upDataToDoItem.upDateEndDate"/>
@@ -120,10 +120,11 @@ export default {
     }
   },
   created() {
+        this.timestamp = `${getDate().month}/${getDate().date} ${getDate().week}`;
         // 조금 더 이해하고 수정
         const now = new Date();
         const tomorrow = new Date(now.setDate(now.getDate() +1));
-        this.timestamp = `${getDate().month}/${getDate().date} ${getDate().week}`;
+        
         this.createTodoItem.newTodoItemStartDate = new Date().toISOString().substring(0, 10);
         this.createTodoItem.newTodoItemEndDate = tomorrow.toISOString().substring(0, 10);
 
@@ -138,11 +139,16 @@ export default {
   },
   methods: {
 
-    // 인풋초기화
+    // 초기화
     clearInput() {
       this.createTodoItem.newTodoItemData = "";
       this.createTodoItem.newTodoItemStartDate = "";
       this.createTodoItem.newTodoItemEndDate = "";
+
+      const now = new Date();
+      const tomorrow = new Date(now.setDate(now.getDate() +1));
+      this.createTodoItem.newTodoItemStartDate = new Date().toISOString().substring(0, 10);
+      this.createTodoItem.newTodoItemEndDate = tomorrow.toISOString().substring(0, 10);
     },
 
     // 체크박스초기화
@@ -166,6 +172,7 @@ export default {
         hide: false,
       }
       this.todoItems.push(value);
+      
       // console.log(this.todoItems);
       this.clearInput();
     },
@@ -223,7 +230,7 @@ export default {
 
       this.todoItems[data.upDataIndex] = {
         importance: updataImportanceData,
-        registerDate: data.registerDate,
+        registerDate: data.upDataRegisterDate,
         data: data.upDataData,
         startDate: data.upDateStartDeat,
         endDate: data.upDateEndDate,
