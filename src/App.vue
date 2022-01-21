@@ -3,6 +3,14 @@
       <header><h1>MY TO DO</h1></header>
       <div>
         <label>{{ timestamp }}</label>
+
+        <select id="selectBox">
+          <option value="선택안함" selected>=== 중요도 ===</option>
+          <option value="no" disabled>안해도됨</option>
+          <option value="낮음">낮음</option>
+          <option value="보통">보통</option>
+          <option value="높음">높음</option>
+        </select>
         <input type="text" placeholder="할 일" v-model="createTodoItem.newTodoItemData" />
         <input type="date" placeholder="시작일" value="2022-07-09" v-model="createTodoItem.newTodoItemStartDate" />
         <input type="date" placeholder="종료일" v-model="createTodoItem.newTodoItemEndDate" />
@@ -25,6 +33,7 @@
           <thead>
             <tr>
               <th><input type="checkbox"/></th>
+              <th>중요도</th>
               <th>등록일</th>
               <th>할 일</th>
               <th>시작일</th>
@@ -60,6 +69,14 @@
       <div v-show="showModal" class="modal">
         <div>
           <p>update TO DO</p>
+          <select id="updataSelectBox">
+          <option value="선택안함">=== 중요도 ===</option>
+          <option value="no" disabled>안해도됨</option>
+          <option value="낮음">낮음</option>
+          <option value="보통">보통</option>
+          <option value="높음">높음</option>
+        </select>
+          <input type="text" v-model="upDataToDoItem.upDataRegisterDate"/>
           <input type="text" v-model="upDataToDoItem.upDataData"/>
           <input type="date" v-model="upDataToDoItem.upDateStartDeat"/>
           <input type="date" v-model="upDataToDoItem.upDateEndDate"/>
@@ -83,7 +100,11 @@ export default {
       timestamp: "",
       todaydate: "",
       showModal: false,
+      // importance: {
+      //   low: "",
+      // },
       createTodoItem: {
+        newTodoImportance: "",
         newTodoItemData: "",
         newTodoItemStartDate: "",
         newTodoItemEndDate: "",
@@ -113,6 +134,7 @@ export default {
 
   },
   computed: {
+    
   },
   methods: {
 
@@ -130,7 +152,13 @@ export default {
     
     // 추가
     addTodoItem() {
-      let value = {
+      const target = document.getElementById("selectBox");
+      const targetValue = target.options[target.selectedIndex].value;
+
+      console.log(target);
+      console.log(targetValue);
+      let value = { 
+        importance: targetValue,
         registerDate: `${getDate().month}/${getDate().date}`,
         data: this.createTodoItem.newTodoItemData,
         startDate: this.createTodoItem.newTodoItemStartDate,
@@ -156,6 +184,7 @@ export default {
     // 수정모달창에 값전달
     updateModal(todoItem, index) {
       this.showModal = !this.showModal;
+      document.getElementById("updataSelectBox").value = todoItem.importance;
       this.upDataToDoItem = {
         upDataRegisterDate : todoItem.registerDate,
         upDataData : todoItem.data,
@@ -189,10 +218,12 @@ export default {
 
     // 수정
     updateTodoItem(data) {
-
+      const updataImportance = document.getElementById("updataSelectBox");
+      const updataImportanceData = updataImportance.options[updataImportance.selectedIndex].value;
 
       this.todoItems[data.upDataIndex] = {
-        registerDate : data.upDataRegisterDate,
+        importance: updataImportanceData,
+        registerDate: data.registerDate,
         data: data.upDataData,
         startDate: data.upDateStartDeat,
         endDate: data.upDateEndDate,

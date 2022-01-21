@@ -1,6 +1,7 @@
 <template>
       <tr v-show="!todoItem.hide">
         <td><input type="checkbox" v-model="todoItem.hide"/></td>
+        <td>{{ todoItem.importance }}</td>
         <td>{{ todoItem.registerDate }}</td>
         <td >{{ todoItem.data }}</td>
         <td >{{ todoItem.startDate }}</td>
