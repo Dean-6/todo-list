@@ -4,7 +4,7 @@
       <div>
         <label>{{ timestamp }}</label>
         <input type="text" placeholder="할 일" v-model="createTodoItem.newTodoItemData" />
-        <input type="date" placeholder="시작일" value="" v-model="createTodoItem.newTodoItemStartDate" />
+        <input type="date" placeholder="시작일" value="2022-07-09" v-model="createTodoItem.newTodoItemStartDate" />
         <input type="date" placeholder="종료일" v-model="createTodoItem.newTodoItemEndDate" />
         <button v-on:click="addTodoItem">
           <span>Add</span>
@@ -81,7 +81,7 @@ export default {
   data() {
     return {
       timestamp: "",
-      today: "",
+      todaydate: "",
       showModal: false,
       createTodoItem: {
         newTodoItemData: "",
@@ -99,8 +99,20 @@ export default {
     }
   },
   created() {
+        // 조금 더 이해하고 수정
+        const now = new Date();
+        const tomorrow = new Date(now.setDate(now.getDate() +1));
         this.timestamp = `${getDate().month}/${getDate().date} ${getDate().week}`;
-        
+        this.createTodoItem.newTodoItemStartDate = new Date().toISOString().substring(0, 10);
+        this.createTodoItem.newTodoItemEndDate = tomorrow.toISOString().substring(0, 10);
+
+        // 잘 모르겠어서 더 알아보고 수정
+        // this.createTodoItem.newTodoItemStartDate = new Date().toISOString().format('YYYY-MM-DD'); 
+
+        console.log(this.todaydate);
+
+  },
+  computed: {
   },
   methods: {
 
