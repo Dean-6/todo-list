@@ -1,8 +1,8 @@
 <template>
     <div id="app">
-      <header><h1>MY TO DO</h1></header>
-      <div>
-        <label>{{ timestamp }}</label>
+      <header><h1>TO DO LIST</h1></header>
+      <div class="inputdata">
+        <label><b>{{ timestamp }} </b></label>
 
         <select id="selectBox">
           <option value="선택안함" selected>=== 중요도 ===</option>
@@ -11,9 +11,9 @@
           <option value="보통">보통</option>
           <option value="높음">높음</option>
         </select>
-        <input type="text" placeholder="할 일" v-model="createTodoItem.newTodoItemData" />
-        <input type="date" placeholder="시작일" value="2022-07-09" v-model="createTodoItem.newTodoItemStartDate" />
-        <input type="date" placeholder="종료일" v-model="createTodoItem.newTodoItemEndDate" />
+        <input class="addinput" type="text" placeholder="할 일" v-model="createTodoItem.newTodoItemData" />
+        <input class="addinput" type="date" placeholder="시작일" value="2022-07-09" v-model="createTodoItem.newTodoItemStartDate" />
+        <input class="addinput" type="date" placeholder="종료일" v-model="createTodoItem.newTodoItemEndDate" />
         <button v-on:click="addTodoItem">
           <span>Add</span>
         </button>
@@ -76,10 +76,10 @@
           <option value="보통">보통</option>
           <option value="높음">높음</option>
         </select>
-          <input type="text" disabled v-model="upDataToDoItem.upDataRegisterDate"/>
-          <input type="text" v-model="upDataToDoItem.upDataData"/>
-          <input type="date" v-model="upDataToDoItem.upDateStartDeat"/>
-          <input type="date" v-model="upDataToDoItem.upDateEndDate"/>
+          <input class="updatainput" type="text" disabled v-model="upDataToDoItem.upDataRegisterDate"/>
+          <input class="updatainput" type="text" v-model="upDataToDoItem.upDataData"/>
+          <input class="updatainput" type="date" v-model="upDataToDoItem.upDateStartDeat"/>
+          <input class="updatainput" type="date" v-model="upDataToDoItem.upDateEndDate"/>
           <button v-on:click="updateTodoItem(upDataToDoItem)"><span>Update</span></button>
         </div>
       </div>
@@ -243,7 +243,106 @@ export default {
 </script>
 
 <style>
-  .modal{
-    position: absolute;
+  .addinput, .updatainput {
+    width: 200px;
+    height: 32px;
+    font-size: 15px;
+    border: 0;
+    border-radius: 15px;
+    outline: none;
+    padding-left: 10px;
+    background-color: rgb(233, 233, 233);
+    border: none;
+    border-radius: 1em;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    outline: none;
+  }
+
+  /* #selectBox {
+    border-collapse: collapse;
+    text-align: left;
+    line-height: 1.5;
+    border: 1px solid #ccc;
+    margin: 20px 10px;
+  } */
+
+
+
+  select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    
+    font-family: "Noto Sansf KR", sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1;
+    
+    color: #444;
+    background-color: #E9E9E9;
+    
+    padding: .6em 1.4em .5em .8em;
+    margin: 0;
+    
+    border: none;
+    border-radius: 1em;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    outline: none;
+  }
+
+  button {
+    width: 140px;
+    height: 30px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: #000;
+    background-color: #E9E9E9;
+    border: none;
+    border-radius: 1em;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+  }
+
+  table {
+    border-collapse: collapse;
+    text-align: center;
+    line-height: 1.5;
+    border: 1px solid #E9E9E9;
+    margin: 20px 10px;
+  }
+  table thead {
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    background: #E9E9E9;
+  }
+  table thead th {
+    padding: 10px;
+    font-weight: bold;
+    vertical-align: top;
+    color: #000;
+  }
+  table tbody th {
+    width: 150px;
+    padding: 10px;
+    font-weight: bold;
+    vertical-align: top;
+    border-bottom: 1px solid #ccc;
+    background: #fcf1f4;
+  }
+  table td {
+    width: 350px;
+    padding: 10px;
+    vertical-align: top;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .inputdata {
+    text-align: right;
   }
 </style>
