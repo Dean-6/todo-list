@@ -8,7 +8,7 @@
           <option value="선택안함" selected>=== 중요도 ===</option>
           <option value="no" disabled>안해도됨</option>
           <option value="낮음">낮음</option>
-          <option value="보통">보통</option>
+          <option value="중간">중간</option>
           <option value="높음">높음</option>
         </select>
         <input class="addinput" type="text" placeholder="할 일" v-model="createTodoItem.newTodoItemData" />
@@ -58,6 +58,10 @@
             <todo-list-node
               v-bind:key="index"
               v-bind:todoItem="todoItem"
+              v-bind:lowFontStyle="lowFontStyle"
+              v-bind:middleFontStyle="middleFontStyle"
+              v-bind:highFontStyle="highFontStyle"
+              v-bind:FontColor="FontColor"
               v-on:delete="deleteTodoItem(index)"
               v-on:update="updateModal(todoItem, index)"
             ></todo-list-node>
@@ -73,7 +77,7 @@
           <option value="선택안함">=== 중요도 ===</option>
           <option value="no" disabled>안해도됨</option>
           <option value="낮음">낮음</option>
-          <option value="보통">보통</option>
+          <option value="중간">중간</option>
           <option value="높음">높음</option>
         </select>
           <input class="updatainput" type="text" disabled v-model="upDataToDoItem.upDataRegisterDate"/>
@@ -116,7 +120,24 @@ export default {
         upDateEndDate: "",
         upDataIndex: 0,
       },
-      todoItems: []
+      todoItems: [],
+
+      lowFontStyle: {
+        'fontColor': 'red',
+        'fontWeight': '200',
+      },
+      
+      middleFontStyle: {
+        'fontColor': 'green',
+        'fontWeight': '500',
+      },
+
+      highFontStyle: {
+        'fontColor': 'blue',
+        'fontWeight': '900',
+      },
+
+      FontColor: '#000',
     }
   },
   created() {
