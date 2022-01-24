@@ -73,12 +73,23 @@
       <div v-show="showModal" class="modal">
         <div>
           <p>update TO DO</p>
-          <select id="updataSelectBox">
-          <option value="선택안함">=== 중요도 ===</option>
-          <option value="no" disabled>안해도됨</option>
-          <option value="낮음">낮음</option>
-          <option value="중간">중간</option>
-          <option value="높음">높음</option>
+          <select id="updataSelectBox"
+            v-bind:class="[
+              upDataToDoItem.upDataImportance=='낮음'?['bgcolorGreen']:[],
+              upDataToDoItem.upDataImportance=='중간'?['bgcolorYellow']:[],
+              upDataToDoItem.upDataImportance=='높음'?['bgcolorRed']:[],
+           ]"
+            v-bind:style="[
+              upDataToDoItem.upDataImportance=='낮음'?{color : lowFontStyle.fontColor, fontWeight: lowFontStyle.fontWeight} : {},
+              upDataToDoItem.upDataImportance=='중간'?{color : middleFontStyle.fontColor, fontWeight: middleFontStyle.fontWeight} : {},
+              upDataToDoItem.upDataImportance=='높음'?{color : highFontStyle.fontColor, fontWeight: highFontStyle.fontWeight} : {},
+            ]"
+          >
+          <option style="background-color: #fff; color:#333;" value="선택안함">=== 중요도 ===</option>
+          <option style="background-color: #fff; color:#333;" value="no" disabled>안해도됨</option>
+          <option style="background-color: green; color:#fff;" value="낮음">낮음</option>
+          <option style="background-color: yellow; color:#fff;" value="중간">중간</option>
+          <option style="background-color: red; color:#fff;" value="높음">높음</option>
         </select>
           <input class="updatainput" type="text" disabled v-model="upDataToDoItem.upDataRegisterDate"/>
           <input class="updatainput" type="text" v-model="upDataToDoItem.upDataData"/>
@@ -114,6 +125,7 @@ export default {
         newTodoItemEndDate: "",
       },
       upDataToDoItem: {
+        upDataImportance: "",
         upDataRegisterDate: "",
         upDataData: "",
         upDateStartDeat: "",
@@ -214,6 +226,7 @@ export default {
       this.showModal = !this.showModal;
       document.getElementById("updataSelectBox").value = todoItem.importance;
       this.upDataToDoItem = {
+        upDataImportance : todoItem.importance,
         upDataRegisterDate : todoItem.registerDate,
         upDataData : todoItem.data,
         upDateStartDeat : todoItem.startDate,
