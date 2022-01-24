@@ -4,7 +4,7 @@
       <div class="inputdata">
         <label><b>{{ timestamp }} </b></label>
 
-        <select id="selectBox">
+        <select id="selectBox" @change="createSelect($event)">
           <option value="선택안함" selected>===== 중요도 =====</option>
           <option value="no" disabled>안해도됨</option>
           <option value="낮음">낮음</option>
@@ -32,11 +32,11 @@
       </div>
       <br>
       <div>
-        <label>중요도 - {{showList}}</label>
+        <label><b>중요도 - {{showList}}</b></label>
         <table border="1px solid #333;">
           <thead>
             <tr>
-              <th><input type="checkbox"/></th>
+              <th>완료</th>
               <th>중요도</th>
               <th>등록일</th>
               <th>할 일</th>
@@ -47,22 +47,7 @@
             </tr>
           </thead>
           <tbody>
-            <template v-for="(todoItem, index) in todoItems.filter(todoItem => this.showList == '전체보기' && todoItem.completed == false)">
-            <todo-list-node
-              v-bind:key="index"
-              v-bind:todoItem="todoItem"
-              v-bind:lowFontStyle="lowFontStyle"
-              v-bind:middleFontStyle="middleFontStyle"
-              v-bind:highFontStyle="highFontStyle"
-              v-bind:FontColor="FontColor"
-              v-on:delete="deleteTodoItem(index)"
-              v-on:update="updateModal(todoItem, index)"
-              v-on:check="changeShow(todoItem)"
-            ></todo-list-node>
-            </template>
-          </tbody>
-          <tbody>
-            <template v-for="(todoItem, index) in todoItems.filter(todoItem => todoItem.importance == this.showList && todoItem.completed == false)">
+            <template v-for="(todoItem, index) in todoItems.filter(todoItem => (this.showList == '전체보기' ||  todoItem.importance == this.showList) && todoItem.completed == false)">
             <todo-list-node
               v-bind:key="index"
               v-bind:todoItem="todoItem"
@@ -80,11 +65,11 @@
       </div>
       <br>
       <div v-show="showCompleted">
-        <label>완료 목록</label>
+        <label><b>완료 목록</b></label>
         <table border="1px solid #333;">
           <thead>
             <tr>
-              <th><input type="checkbox"/></th>
+              <th>완료취소</th>
               <th>중요도</th>
               <th>등록일</th>
               <th>할 일</th>
@@ -146,12 +131,10 @@
 <script>
 import getDate from "./assets/commonJS/getDate"
 import todoListNode from "./components/TodoListNode.vue"
-// import todoTableNode from './components/TodoTableNode.vue';
 
 export default {
   components: {
     todoListNode, 
-    // todoTableNode,
   },
   
   data() {
@@ -161,9 +144,7 @@ export default {
       showList: "전체보기",
       showCompleted: false, 
       showModal: false,
-      // importance: {
-      //   low: "",
-      // },
+      createSelectValue: "",
       createTodoItem: {
         newTodoImportance: "",
         newTodoItemData: "",
@@ -187,7 +168,7 @@ export default {
       
       middleFontStyle: {
         'fontColor': 'green',
-        'fontWeight': '500',
+        'fontWeight': '700',
       },
 
       highFontStyle: {
@@ -199,12 +180,7 @@ export default {
     }
   },
   computed: {
-    // showCompletedNow() {
-    //   for(var i=0; i<=this.todoItems.length; i++){
-    //     this.todoItems[i].completed == true;
-    //     return this.showCompleted = !this.showCompleted;
-    //   }
-    // }
+
   },
 
   created() {
@@ -215,20 +191,18 @@ export default {
         
         this.createTodoItem.newTodoItemStartDate = new Date().toISOString().substring(0, 10);
         this.createTodoItem.newTodoItemEndDate = tomorrow.toISOString().substring(0, 10);
-
-        // 잘 모르겠어서 더 알아보고 수정
-        // this.createTodoItem.newTodoItemStartDate = new Date().toISOString().format('YYYY-MM-DD'); 
-
-        console.log(this.todaydate);
   },
 
   methods: {
+    createSelect(event) {
+      console.log(event.target.value);
+      this.createSelectValue = event.target.value;
+    },
 
     // 목록보기 필터
     changeListShow() {
       const target = document.getElementById("showListSelect");
       this.showList = target.options[target.selectedIndex].value;
-      // this.showList.showListText = target.options[target.selectedIndex].Text;
       console.log(this.showList);
     },
 
@@ -246,13 +220,11 @@ export default {
     
     // 추가
     addTodoItem() {
-      const target = document.getElementById("selectBox");
-      const targetValue = target.options[target.selectedIndex].value;
+      // const target = document.getElementById("selectBox");
+      // const targetValue = target.options[target.selectedIndex].value;
 
-      // console.log(target);
-      // console.log(targetValue);
       let value = { 
-        importance: targetValue,
+        importance: this.createSelectValue,
         registerDate: `${getDate().month}/${getDate().date}`,
         data: this.createTodoItem.newTodoItemData,
         startDate: this.createTodoItem.newTodoItemStartDate,
@@ -260,22 +232,15 @@ export default {
         completed: false,
       }
       this.todoItems.push(value);
-      // console.log(this.todoItems);
-      
-      // console.log(this.todoItems);
       this.clearInput();
     },
 
     // 선택 삭제
     deleteTodoItem(index) {
-      // var index = this.todoItems.findIndex(function(value){
-      //   return todoItems.data === value; 
-      // })  
       this.todoItems.splice(index, 1);
       console.log(index);
-      // this.todoItems.splice(index,1);
-
     },
+
     // 완료목록 보기
     showCompletedList() {
       this.showCompleted = !this.showCompleted;
@@ -293,11 +258,6 @@ export default {
         upDateEndDate : todoItem.endDate,
         upDataIndex : index
       }
-      // this.upDataToDoItem.upDataData = todoItem.data;
-      // this.upDataToDoItem.upDataIndex = index;
-      
-      // console.log(this.upTodoIndex);
-      // console.log(this.upTodoData);
     },
 
     // 모두삭제
@@ -305,6 +265,7 @@ export default {
       this.todoItems = [];
     },
 
+    // 체크하기
     changeShow(todoItem) {
       todoItem.completed = !todoItem.completed;
       console.log(todoItem.completed);
@@ -328,8 +289,8 @@ export default {
         data: data.upDataData,
         startDate: data.upDateStartDeat,
         endDate: data.upDateEndDate,
+        completed: false,
       };
-      // this.todoItems.splice(index, 1, value);
       this.showModal = !this.showModal;
     },
   }

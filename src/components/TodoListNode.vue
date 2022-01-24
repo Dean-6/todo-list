@@ -12,7 +12,10 @@
           ]"
       >
       <!-- <tr v-show="todoItem.importance=='선택안함'"> -->
-        <td><input type="checkbox" v-on:click="$emit('check')" v-model="todoItem.completed"/></td>
+        <td>
+          <button v-if="!todoItem.completed" v-on:click="$emit('check')">완료</button>
+          <button v-else v-on:click="$emit('check')">완료취소</button>
+        </td>
         <td>{{ todoItem.importance }}</td>
         <td>{{ todoItem.registerDate }}</td>
         <td >{{ todoItem.data }}</td>
