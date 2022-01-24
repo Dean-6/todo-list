@@ -237,7 +237,29 @@ export default {
       };
       // this.todoItems.splice(index, 1, value);
       this.showModal = !this.showModal;
-    }
+    },
+
+    // importanceCheck(data) {
+    //   if(data == "낮음"){
+        
+    //   }else if(data == "중간"){
+
+    //   }else if(data == "높음"){
+
+    //   }
+    // },
+
+    // importanceMiddle(data) {
+    //   if(data == "중간"){
+    //     document.querySelector('tr').style.cssText  = 'background-color:#fff200;';
+    //   }
+    // },
+
+    // importanceHigh(data) {
+    //   if(data == "높음"){
+    //     document.querySelector('tr').style.cssText  = 'background-color:#ff0000;';
+    //   }
+    // },
   }
 };
 </script>
@@ -344,5 +366,17 @@ export default {
 
   .inputdata {
     text-align: right;
+  }
+
+  .bgcolorGreen {
+    background: green;
+  }
+
+  .bgcolorYellow {
+    background-color: yellow;
+  }
+
+  .bgcolorRed {
+    background-color: red;
   }
 </style>

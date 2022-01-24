@@ -2,6 +2,11 @@
       <tr v-show="!todoItem.hide">
         <td><input type="checkbox" v-model="todoItem.hide"/></td>
         <td>{{ todoItem.importance }}</td>
+          v-bind:class="[
+            todoItem.importance=='낮음'?['bgcolorGreen']:[],
+            todoItem.importance=='중간'?['bgcolorYellow']:[],
+            todoItem.importance=='높음'?['bgcolorRed']:[],
+          ]"
         <td>{{ todoItem.registerDate }}</td>
         <td >{{ todoItem.data }}</td>
         <td >{{ todoItem.startDate }}</td>
