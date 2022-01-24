@@ -5,7 +5,7 @@
         <label><b>{{ timestamp }} </b></label>
 
         <select id="selectBox">
-          <option value="선택안함" selected>=== 중요도 ===</option>
+          <option value="선택안함" selected>===== 중요도 =====</option>
           <option value="no" disabled>안해도됨</option>
           <option value="낮음">낮음</option>
           <option value="중간">중간</option>
@@ -18,17 +18,21 @@
           <span>Add</span>
         </button>
       </div>
-      <div>
+      <div class="buttonBox">
+        <button v-on:click="showCompletedList">완료 목록 보기</button>
+        <select id="showListSelect" v-on:click="changeListShow()">
+          <option value="전체보기" selected>전체보기</option>
+          <option value="선택안함">선택안함</option>
+          <option value="낮음">중요도 - 낮음</option>
+          <option value="중간">중요도 - 중간</option>
+          <option value="높음">중료도 - 높음</option>
+        </select>
         <button v-on:click="deleteAll">Delete All</button>
         <button v-on:click="showAll">Show All</button>
       </div>
       <br>
       <div>
-        <!-- <ul>
-          <li v-for="todoItem in todoItems" v-bind:key="todoItem">
-            <span v-bind:for="todoItem">{{ todoItem }}</span>
-          </li>
-        </ul> -->
+        <label>중요도 - {{showList}}</label>
         <table border="1px solid #333;">
           <thead>
             <tr>
@@ -43,18 +47,7 @@
             </tr>
           </thead>
           <tbody>
-            <!-- <template v-for="(todoItem, index) in todoItems">
-            <tr v-show="!todoItem.hide" v-bind:key="index">
-              <td><input type="checkbox" v-model="todoItem.hide"/></td>
-              <td>{{ todoItem.registerDate }}</td>
-              <td >{{ todoItem.data }}</td>
-              <td >{{ todoItem.startDate }}</td>
-              <td >{{ todoItem.endDate }}</td>
-              <td><button v-on:click="deleteTodoItem(index)">삭제</button></td>
-              <td><button v-on:click="updateModal(todoItem, index)">수정</button></td>
-            </tr>
-            </template> -->
-            <template v-for="(todoItem, index) in todoItems" >
+            <template v-for="(todoItem, index) in todoItems.filter(todoItem => this.showList == '전체보기' && todoItem.completed == false)">
             <todo-list-node
               v-bind:key="index"
               v-bind:todoItem="todoItem"
@@ -64,6 +57,55 @@
               v-bind:FontColor="FontColor"
               v-on:delete="deleteTodoItem(index)"
               v-on:update="updateModal(todoItem, index)"
+              v-on:check="changeShow(todoItem)"
+            ></todo-list-node>
+            </template>
+          </tbody>
+          <tbody>
+            <template v-for="(todoItem, index) in todoItems.filter(todoItem => todoItem.importance == this.showList && todoItem.completed == false)">
+            <todo-list-node
+              v-bind:key="index"
+              v-bind:todoItem="todoItem"
+              v-bind:lowFontStyle="lowFontStyle"
+              v-bind:middleFontStyle="middleFontStyle"
+              v-bind:highFontStyle="highFontStyle"
+              v-bind:FontColor="FontColor"
+              v-on:delete="deleteTodoItem(index)"
+              v-on:update="updateModal(todoItem, index)"
+              v-on:check="changeShow(todoItem)"
+            ></todo-list-node>
+            </template>
+          </tbody>
+        </table>
+      </div>
+      <br>
+      <div v-show="showCompleted">
+        <label>완료 목록</label>
+        <table border="1px solid #333;">
+          <thead>
+            <tr>
+              <th><input type="checkbox"/></th>
+              <th>중요도</th>
+              <th>등록일</th>
+              <th>할 일</th>
+              <th>시작일</th>
+              <th>종료일</th>
+              <th>삭제</th>
+              <th>수정</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-for="(todoItem, index) in todoItems.filter(todoItem => todoItem.completed == true)">
+            <todo-list-node
+              v-bind:key="index"
+              v-bind:todoItem="todoItem"
+              v-bind:lowFontStyle="lowFontStyle"
+              v-bind:middleFontStyle="middleFontStyle"
+              v-bind:highFontStyle="highFontStyle"
+              v-bind:FontColor="FontColor"
+              v-on:delete="deleteTodoItem(index)"
+              v-on:update="updateModal(todoItem, index)"
+              v-on:check="changeShow(todoItem)"
             ></todo-list-node>
             </template>
           </tbody>
@@ -71,8 +113,8 @@
       </div>
       <br>
       <div v-show="showModal" class="modal">
-        <div>
-          <p>update TO DO</p>
+        <div class="updataTable">
+          <p><b>update TO DO</b></p>
           <select id="updataSelectBox"
             v-bind:class="[
               upDataToDoItem.upDataImportance=='낮음'?['bgcolorGreen']:[],
@@ -104,16 +146,20 @@
 <script>
 import getDate from "./assets/commonJS/getDate"
 import todoListNode from "./components/TodoListNode.vue"
+// import todoTableNode from './components/TodoTableNode.vue';
 
 export default {
   components: {
-    todoListNode,
+    todoListNode, 
+    // todoTableNode,
   },
   
   data() {
     return {
       timestamp: "",
       todaydate: "",
+      showList: "전체보기",
+      showCompleted: false, 
       showModal: false,
       // importance: {
       //   low: "",
@@ -152,6 +198,15 @@ export default {
       FontColor: '#000',
     }
   },
+  computed: {
+    // showCompletedNow() {
+    //   for(var i=0; i<=this.todoItems.length; i++){
+    //     this.todoItems[i].completed == true;
+    //     return this.showCompleted = !this.showCompleted;
+    //   }
+    // }
+  },
+
   created() {
         this.timestamp = `${getDate().month}/${getDate().date} ${getDate().week}`;
         // 조금 더 이해하고 수정
@@ -165,12 +220,17 @@ export default {
         // this.createTodoItem.newTodoItemStartDate = new Date().toISOString().format('YYYY-MM-DD'); 
 
         console.log(this.todaydate);
+  },
 
-  },
-  computed: {
-    
-  },
   methods: {
+
+    // 목록보기 필터
+    changeListShow() {
+      const target = document.getElementById("showListSelect");
+      this.showList = target.options[target.selectedIndex].value;
+      // this.showList.showListText = target.options[target.selectedIndex].Text;
+      console.log(this.showList);
+    },
 
     // 초기화
     clearInput() {
@@ -183,28 +243,24 @@ export default {
       this.createTodoItem.newTodoItemStartDate = new Date().toISOString().substring(0, 10);
       this.createTodoItem.newTodoItemEndDate = tomorrow.toISOString().substring(0, 10);
     },
-
-    // 체크박스초기화
-    clearCheck() {
-      
-    },
     
     // 추가
     addTodoItem() {
       const target = document.getElementById("selectBox");
       const targetValue = target.options[target.selectedIndex].value;
 
-      console.log(target);
-      console.log(targetValue);
+      // console.log(target);
+      // console.log(targetValue);
       let value = { 
         importance: targetValue,
         registerDate: `${getDate().month}/${getDate().date}`,
         data: this.createTodoItem.newTodoItemData,
         startDate: this.createTodoItem.newTodoItemStartDate,
         endDate: this.createTodoItem.newTodoItemEndDate,
-        hide: false,
+        completed: false,
       }
       this.todoItems.push(value);
+      // console.log(this.todoItems);
       
       // console.log(this.todoItems);
       this.clearInput();
@@ -219,6 +275,10 @@ export default {
       console.log(index);
       // this.todoItems.splice(index,1);
 
+    },
+    // 완료목록 보기
+    showCompletedList() {
+      this.showCompleted = !this.showCompleted;
     },
 
     // 수정모달창에 값전달
@@ -245,15 +305,15 @@ export default {
       this.todoItems = [];
     },
 
-    // 체크한 요소
     changeShow(todoItem) {
-      todoItem.hide = !todoItem.hide;
+      todoItem.completed = !todoItem.completed;
+      console.log(todoItem.completed);
     },
 
     // 모두 보이기
     showAll() {
       for(var i=0; i<=this.todoItems.length; i++){
-        this.todoItems[i].hide = false;
+        this.todoItems[i].completed = false;
       }
     },
 
@@ -272,35 +332,15 @@ export default {
       // this.todoItems.splice(index, 1, value);
       this.showModal = !this.showModal;
     },
-
-    // importanceCheck(data) {
-    //   if(data == "낮음"){
-        
-    //   }else if(data == "중간"){
-
-    //   }else if(data == "높음"){
-
-    //   }
-    // },
-
-    // importanceMiddle(data) {
-    //   if(data == "중간"){
-    //     document.querySelector('tr').style.cssText  = 'background-color:#fff200;';
-    //   }
-    // },
-
-    // importanceHigh(data) {
-    //   if(data == "높음"){
-    //     document.querySelector('tr').style.cssText  = 'background-color:#ff0000;';
-    //   }
-    // },
   }
 };
 </script>
 
 <style>
+
+
   .addinput, .updatainput {
-    width: 200px;
+    width: 250px;
     height: 32px;
     font-size: 15px;
     border: 0;
@@ -309,26 +349,18 @@ export default {
     padding-left: 10px;
     background-color: rgb(233, 233, 233);
     border: none;
-    border-radius: 1em;
+    /* border-radius: 1em; */
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     outline: none;
+    margin: 0 10px;
   }
-
-  /* #selectBox {
-    border-collapse: collapse;
-    text-align: left;
-    line-height: 1.5;
-    border: 1px solid #ccc;
-    margin: 20px 10px;
-  } */
-
-
 
   select {
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
+    width: 250px;
     
     font-family: "Noto Sansf KR", sans-serif;
     font-size: 1rem;
@@ -346,12 +378,13 @@ export default {
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     outline: none;
+    margin: 0 15px;
   }
 
   button {
     width: 140px;
     height: 30px;
-    font-size: 11px;
+    font-size: 15px;
     text-transform: uppercase;
     letter-spacing: 2.5px;
     font-weight: 500;
@@ -363,6 +396,7 @@ export default {
     transition: all 0.3s ease 0s;
     cursor: pointer;
     outline: none;
+    margin: 0 15px;
   }
 
   table {
@@ -402,6 +436,11 @@ export default {
     text-align: right;
   }
 
+  .buttonBox{
+    text-align: right;
+    margin-top: 20px;
+  }
+
   .bgcolorGreen {
     background: green;
   }
@@ -412,5 +451,9 @@ export default {
 
   .bgcolorRed {
     background-color: red;
+  }
+  
+  .updataTable {
+    text-align: right;
   }
 </style>

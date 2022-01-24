@@ -1,8 +1,6 @@
 <template>
-      <tr v-show="!todoItem.hide">
-        <td><input type="checkbox" v-model="todoItem.hide"/></td>
-        <td 
-          v-bind:class="[
+      <tr 
+        v-bind:class="[
             todoItem.importance=='낮음'?['bgcolorGreen']:[],
             todoItem.importance=='중간'?['bgcolorYellow']:[],
             todoItem.importance=='높음'?['bgcolorRed']:[],
@@ -12,7 +10,10 @@
             todoItem.importance=='중간'?{color : middleFontStyle.fontColor, fontWeight: middleFontStyle.fontWeight} : {},
             todoItem.importance=='높음'?{color : highFontStyle.fontColor, fontWeight: highFontStyle.fontWeight} : {},
           ]"
-        >{{ todoItem.importance }}</td>
+      >
+      <!-- <tr v-show="todoItem.importance=='선택안함'"> -->
+        <td><input type="checkbox" v-on:click="$emit('check')" v-model="todoItem.completed"/></td>
+        <td>{{ todoItem.importance }}</td>
         <td>{{ todoItem.registerDate }}</td>
         <td >{{ todoItem.data }}</td>
         <td >{{ todoItem.startDate }}</td>
@@ -26,27 +27,9 @@
 export default {
     props: ["todoItem", "FontColor" ,"lowFontStyle", "middleFontStyle", "highFontStyle"],
     methods: {
-      // deleteTodoItem: function(){
-        
-      // },
-
-      // updateModal: function(){
-      //   this.$emit("update");
-      // }
     },
 }
 </script>
 
 <style>
-  /* .bgcolorGreen {
-      background: green;
-    }
-
-    .bgcolorYellow {
-      background-color: yellow;
-    }
-
-    .bgcolorRed {
-      background-color: red;
-    } */
 </style>
