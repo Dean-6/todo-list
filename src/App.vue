@@ -1,34 +1,79 @@
 <template>
-    <div id="app">
-      <header><h1>TO DO LIST</h1></header>
-      <div class="inputdata">
-        <label><b>{{ timestamp }} </b></label>
-
-        <select id="selectBox" @change="createSelect($event)">
-          <option value="선택안함" selected>===== 중요도 =====</option>
-          <option value="no" disabled>안해도됨</option>
-          <option value="낮음">낮음</option>
-          <option value="중간">중간</option>
-          <option value="높음">높음</option>
-        </select>
-        <input class="addinput" type="text" placeholder="할 일" v-model="createTodoItem.newTodoItemData" />
-        <input class="addinput" type="date" placeholder="시작일" value="2022-07-09" v-model="createTodoItem.newTodoItemStartDate" />
-        <input class="addinput" type="date" placeholder="종료일" v-model="createTodoItem.newTodoItemEndDate" />
-        <button v-on:click="addTodoItem">
-          <span>Add</span>
-        </button>
-      </div>
-      <div class="buttonBox">
-        <button v-on:click="showCompletedList">완료 목록 보기</button>
-        <select id="showListSelect" v-on:click="changeListShow()">
-          <option value="전체보기" selected>전체보기</option>
-          <option value="선택안함">선택안함</option>
-          <option value="낮음">중요도 - 낮음</option>
-          <option value="중간">중요도 - 중간</option>
-          <option value="높음">중료도 - 높음</option>
-        </select>
-        <button v-on:click="deleteAll">Delete All</button>
-        <button v-on:click="showAll">Show All</button>
+    <v-app id="app" style="width: 100%">
+      <!-- <header><h1>TO DO LIST</h1></header> -->
+      <v-banner
+          elevation="24"
+          single-line
+          sticky
+          style="width: 100%"
+        ><h1>TO DO LIST</h1></v-banner>
+      
+      <!-- <div> -->
+        <v-banner
+          elevation="20"
+          single-line
+          sticky
+          style="position-absolute top-0 start-50 translate-middle width: 90%"
+        >{{ timestamp }}</v-banner>
+        <!-- <label><b>{{ timestamp }} </b></label> -->
+        <br>
+        <div class="inputdata" >
+          <v-container>
+            <v-row>
+              <v-col>
+                <v-select
+                  :items="selectItem"
+                  label="중요도"
+                ></v-select>
+                <select id="selectBox" @change="createSelect($event)">
+                  <option value="선택안함" selected>===== 중요도 =====</option>
+                  <option value="no" disabled>안해도됨</option>
+                  <option value="낮음">낮음</option>
+                  <option value="중간">중간</option>
+                  <option value="높음">높음</option>
+                </select>
+              </v-col>
+              <v-col>
+                <v-text-field
+                  label="계획"
+                  placeholder="할 일"
+                  v-model="createTodoItem.newTodoItemData" 
+                ></v-text-field>
+                <!-- <v-text-field
+                  label="계획"
+                  placeholder="할 일"
+                  outlined
+                  v-model="createTodoItem.newTodoItemData" 
+                ></v-text-field> -->
+                <!-- <input class="addinput" type="text" placeholder="할 일" v-model="createTodoItem.newTodoItemData" /> -->
+              </v-col>
+              <v-col>
+                <input class="addinput" type="date" placeholder="시작일" v-model="createTodoItem.newTodoItemStartDate" />
+              </v-col>
+              <v-col>
+                <input class="addinput" type="date" placeholder="종료일" v-model="createTodoItem.newTodoItemEndDate" />
+              </v-col>
+              <v-col>
+                <button v-on:click="addTodoItem">
+                  <span>Add</span>
+                </button>
+              </v-col>
+            </v-row>
+            <v-row>
+            <div class="buttonBox">
+              <button v-on:click="showCompletedList">완료 목록 보기</button>
+              <select id="showListSelect" v-on:click="changeListShow()">
+                <option value="전체보기" selected>전체보기</option>
+                <option value="선택안함">선택안함</option>
+                <option value="낮음">중요도 - 낮음</option>
+                <option value="중간">중요도 - 중간</option>
+                <option value="높음">중료도 - 높음</option>
+              </select>
+              <button v-on:click="deleteAll">Delete All</button>
+              <button v-on:click="showAll">Show All</button>
+            </div>
+          </v-row>
+        </v-container>
       </div>
       <br>
       <div>
@@ -123,7 +168,7 @@
           <button v-on:click="updateTodoItem(upDataToDoItem)"><span>Update</span></button>
         </div>
       </div>
-    </div>  
+    </v-app>  
 </template>
 
 <script>
@@ -143,6 +188,12 @@ export default {
       showCompleted: false, 
       showModal: false,
       createSelectValue: "",
+      selectItem: [
+        '선택안함',
+        '낮음',
+        '중간',
+        '높음'
+      ],
       createTodoItem: {
         newTodoImportance: "",
         newTodoItemData: "",
