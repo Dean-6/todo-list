@@ -75,8 +75,6 @@
               <th>할 일</th>
               <th>시작일</th>
               <th>종료일</th>
-              <th>삭제</th>
-              <th>수정</th>
             </tr>
           </thead>
           <tbody>
