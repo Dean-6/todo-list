@@ -47,7 +47,7 @@
             </tr>
           </thead>
           <tbody>
-            <template v-for="(todoItem, index) in todoItems.filter(todoItem => (this.showList == '전체보기' ||  todoItem.importance == this.showList) && todoItem.completed == false)">
+            <template v-for="(todoItem, index) in todoItems.filter(importanceList)">
             <todo-list-node
               v-bind:key="index"
               v-bind:todoItem="todoItem"
@@ -80,7 +80,7 @@
             </tr>
           </thead>
           <tbody>
-            <template v-for="(todoItem, index) in todoItems.filter(todoItem => todoItem.completed == true)">
+            <template v-for="(todoItem, index) in todoItems.filter(completedList)">
             <todo-list-node
               v-bind:key="index"
               v-bind:todoItem="todoItem"
@@ -180,11 +180,18 @@ export default {
     }
   },
   computed: {
+    importanceList() {
+      return todoItem => (this.showList == '전체보기' ||  todoItem.importance == this.showList) && todoItem.completed == false;
+    },
 
+    completedList() {
+      return todoItem => todoItem.completed == true;
+    }
   },
 
   created() {
         this.timestamp = `${getDate().month}/${getDate().date} ${getDate().week}`;
+        this.createSelectValue = "선택안함";
         // 조금 더 이해하고 수정
         const now = new Date();
         const tomorrow = new Date(now.setDate(now.getDate() +1));
