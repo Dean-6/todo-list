@@ -17,8 +17,8 @@
           <button v-else v-on:click="$emit('check')">완료취소</button>
         </td>
         <td>{{ todoItem.importance }}</td>
-        <td>{{ todoItem.registerDate }}</td>
         <td >{{ todoItem.data }}</td>
+        <td>{{ todoItem.registerDate }}</td>
         <td >{{ todoItem.startDate }}</td>
         <td >{{ todoItem.endDate }}</td>
         <td v-if="!todoItem.completed"><button v-on:click="$emit('delete')">삭제</button></td>

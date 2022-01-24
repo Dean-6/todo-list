@@ -23,6 +23,7 @@
               <v-col>
                 <v-select
                   :items="selectItem"
+                  @change="createSelect($event)"
                   label="중요도"
                 ></v-select>
                 <select id="selectBox" @change="createSelect($event)">
@@ -48,30 +49,165 @@
                 <!-- <input class="addinput" type="text" placeholder="할 일" v-model="createTodoItem.newTodoItemData" /> -->
               </v-col>
               <v-col>
-                <input class="addinput" type="date" placeholder="시작일" v-model="createTodoItem.newTodoItemStartDate" />
+                <v-menu
+                  ref="menu"
+                  v-model="menu"
+                  :close-on-content-click="false"
+                  :return-value.sync="createTodoItem.newTodoItemStartDate"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="createTodoItem.newTodoItemStartDate"
+                      label="시작일"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="createTodoItem.newTodoItemStartDate"
+                    no-title
+                    scrollable
+                  >
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      text
+                      color="#333"
+                      @click="menu = false"
+                    >
+                      Cancel
+                    </v-btn>
+                    <v-btn
+                      text
+                      color="#333"
+                      @click="$refs.menu.save(createTodoItem.newTodoItemStartDate)"
+                    >
+                      OK
+                    </v-btn>
+                  </v-date-picker>
+                </v-menu>
+                <!-- <input class="addinput" type="date" placeholder="시작일" v-model="createTodoItem.newTodoItemStartDate" /> -->
               </v-col>
               <v-col>
-                <input class="addinput" type="date" placeholder="종료일" v-model="createTodoItem.newTodoItemEndDate" />
+                <v-menu
+                  ref="menu1"
+                  v-model="menu1"
+                  :close-on-content-click="false"
+                  :return-value.sync="createTodoItem.newTodoItemEndDate"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="createTodoItem.newTodoItemEndDate"
+                      label="종료일"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="createTodoItem.newTodoItemEndDate"
+                    no-title
+                    scrollable
+                  >
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      text
+                      color="#333"
+                      @click="menu1 = false"
+                    >
+                      Cancel
+                    </v-btn>
+                    <v-btn
+                      text
+                      color="#333"
+                      @click="$refs.menu1.save(createTodoItem.newTodoItemEndDate)"
+                    >
+                      OK
+                    </v-btn>
+                  </v-date-picker>
+                </v-menu>
+                <!-- <input class="addinput" type="date" placeholder="종료일" v-model="createTodoItem.newTodoItemEndDate" /> -->
               </v-col>
               <v-col>
-                <button v-on:click="addTodoItem">
+                <v-btn
+                  class="ma-2"
+                  v-on:click="addTodoItem"
+                  outlined
+                  color="#afafaf"
+                  style="width: 100%"
+                  large
+                >
+                  Add
+                </v-btn>
+                <!-- <button v-on:click="addTodoItem">
                   <span>Add</span>
-                </button>
+                </button> -->
               </v-col>
             </v-row>
             <v-row>
-            <div class="buttonBox">
-              <button v-on:click="showCompletedList">완료 목록 보기</button>
-              <select id="showListSelect" v-on:click="changeListShow()">
-                <option value="전체보기" selected>전체보기</option>
-                <option value="선택안함">선택안함</option>
-                <option value="낮음">중요도 - 낮음</option>
-                <option value="중간">중요도 - 중간</option>
-                <option value="높음">중료도 - 높음</option>
-              </select>
-              <button v-on:click="deleteAll">Delete All</button>
-              <button v-on:click="showAll">Show All</button>
-            </div>
+            <!-- <div class="buttonBox"> -->
+              <v-col>
+              </v-col>
+              <v-col>
+                <v-btn
+                  class="ma-2"
+                  v-on:click="showCompletedList"
+                  outlined
+                  color="#afafaf"
+                  style="width: 100%"
+                  large
+                >
+                  완료 목록 보기
+                </v-btn>
+                <!-- <button v-on:click="showCompletedList">완료 목록 보기</button> -->
+              </v-col>
+              <v-col>
+                <v-select
+                  :items="selectItem"
+                  @change="changeListShow($event)"
+                  label="중요도"
+                ></v-select>
+                <select id="showListSelect" v-on:click="changeListShow()">
+                  <option value="전체보기" selected>전체보기</option>
+                  <option value="선택안함">선택안함</option>
+                  <option value="낮음">중요도 - 낮음</option>
+                  <option value="중간">중요도 - 중간</option>
+                  <option value="높음">중료도 - 높음</option>
+                </select>
+              </v-col>
+              <v-col>
+                <v-btn
+                  class="ma-2"
+                  v-on:click="deleteAll"
+                  outlined
+                  color="#afafaf"
+                  style="width: 100%"
+                  large
+                >
+                  Delete All
+                </v-btn>
+                <!-- <button v-on:click="deleteAll">Delete All</button> -->
+              </v-col>
+              <v-col>
+                <v-btn
+                  class="ma-2"
+                  v-on:click="showAll"
+                  outlined
+                  color="#afafaf"
+                  style="width: 100%"
+                  large
+                >
+                  Show All
+                </v-btn>
+                <!-- <button button v-on:click="showAll">Show All</button> -->
+              </v-col>
+            <!-- </div> -->
           </v-row>
         </v-container>
       </div>
@@ -182,6 +318,8 @@ export default {
   
   data() {
     return {
+      menu: false,
+      menu1: false, 
       timestamp: "",
       todaydate: "",
       showList: "전체보기",
@@ -190,6 +328,12 @@ export default {
       createSelectValue: "",
       selectItem: [
         '선택안함',
+        '낮음',
+        '중간',
+        '높음'
+      ],
+      showListSelect: [
+        '전체목록',
         '낮음',
         '중간',
         '높음'
@@ -225,7 +369,7 @@ export default {
         'fontWeight': '900',
       },
 
-      FontColor: '#000',
+      FontColor: '#333',
     }
   },
   computed: {
@@ -235,7 +379,8 @@ export default {
 
     completedList() {
       return todoItem => todoItem.completed == true;
-    }
+    },
+
   },
 
   created() {
@@ -364,7 +509,7 @@ export default {
     border-radius: 15px;
     outline: none;
     padding-left: 10px;
-    background-color: rgb(233, 233, 233);
+    background-color: #e9e9e9;
     border: none;
     /* border-radius: 1em; */
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
