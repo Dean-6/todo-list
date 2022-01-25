@@ -13,16 +13,62 @@
       >
       <!-- <tr v-show="todoItem.importance=='선택안함'"> -->
         <td>
-          <button v-if="!todoItem.completed" v-on:click="$emit('check')">완료</button>
-          <button v-else v-on:click="$emit('check')">완료취소</button>
+          <v-btn
+            v-if="!todoItem.completed"
+            class="ma-2"
+            v-on:click="$emit('check')"
+            outlined
+            color="#333"
+            style="width: 75%"
+            large
+          >
+          완료
+          </v-btn>
+          <v-btn
+            v-else
+            class="ma-2"
+            v-on:click="$emit('check')"
+            outlined
+            color="#333"
+            style="width: 75%"
+            large
+          >
+          완료취소
+          </v-btn>
+          <!-- <button v-if="!todoItem.completed" v-on:click="$emit('check')">완료</button> -->
+          <!-- <button v-else v-on:click="$emit('check')">완료취소</button> -->
         </td>
         <td>{{ todoItem.importance }}</td>
         <td >{{ todoItem.data }}</td>
         <td>{{ todoItem.registerDate }}</td>
         <td >{{ todoItem.startDate }}</td>
         <td >{{ todoItem.endDate }}</td>
-        <td v-if="!todoItem.completed"><button v-on:click="$emit('delete')">삭제</button></td>
-        <td v-if="!todoItem.completed"><button v-on:click="$emit('update')">수정</button></td>
+        <td v-if="!todoItem.completed">
+          <v-btn
+            class="ma-2"
+            v-on:click="$emit('delete')"
+            outlined
+            color="#333"
+            style="width: 75%"
+            large
+          >
+          삭제
+          </v-btn>
+          <!-- <button v-on:click="$emit('delete')">삭제</button> -->
+        </td>
+        <td v-if="!todoItem.completed">
+          <v-btn
+            class="ma-2"
+            v-on:click="$emit('update')"
+            outlined
+            color="#333"
+            style="width: 75%"
+            large
+          >
+          수정
+          </v-btn>
+          <!-- <button v-on:click="$emit('update')">수정</button> -->
+        </td>
       </tr>
 </template>
 

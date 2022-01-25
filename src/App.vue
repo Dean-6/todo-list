@@ -23,16 +23,17 @@
               <v-col>
                 <v-select
                   :items="selectItem"
-                  @change="createSelect($event)"
                   label="중요도"
+                  v-model="createSelectValue"
+                  return-object
                 ></v-select>
-                <select id="selectBox" @change="createSelect($event)">
+                <!-- <select id="selectBox" @change="createSelect($event)">
                   <option value="선택안함" selected>===== 중요도 =====</option>
                   <option value="no" disabled>안해도됨</option>
                   <option value="낮음">낮음</option>
                   <option value="중간">중간</option>
                   <option value="높음">높음</option>
-                </select>
+                </select> -->
               </v-col>
               <v-col>
                 <v-text-field
@@ -139,7 +140,7 @@
                   class="ma-2"
                   v-on:click="addTodoItem"
                   outlined
-                  color="#afafaf"
+                  color="#333"
                   style="width: 100%"
                   large
                 >
@@ -159,7 +160,7 @@
                   class="ma-2"
                   v-on:click="showCompletedList"
                   outlined
-                  color="#afafaf"
+                  color="#333"
                   style="width: 100%"
                   large
                 >
@@ -169,24 +170,25 @@
               </v-col>
               <v-col>
                 <v-select
-                  :items="selectItem"
-                  @change="changeListShow($event)"
+                  :items="showListSelect"
+                  v-model="showList"
                   label="중요도"
+                  return-object
                 ></v-select>
-                <select id="showListSelect" v-on:click="changeListShow()">
+                <!-- <select id="showListSelect" v-on:click="changeListShow()">
                   <option value="전체보기" selected>전체보기</option>
                   <option value="선택안함">선택안함</option>
                   <option value="낮음">중요도 - 낮음</option>
                   <option value="중간">중요도 - 중간</option>
                   <option value="높음">중료도 - 높음</option>
-                </select>
+                </select> -->
               </v-col>
               <v-col>
                 <v-btn
                   class="ma-2"
                   v-on:click="deleteAll"
                   outlined
-                  color="#afafaf"
+                  color="#333"
                   style="width: 100%"
                   large
                 >
@@ -199,7 +201,7 @@
                   class="ma-2"
                   v-on:click="showAll"
                   outlined
-                  color="#afafaf"
+                  color="#333"
                   style="width: 100%"
                   large
                 >
@@ -322,7 +324,7 @@ export default {
       menu1: false, 
       timestamp: "",
       todaydate: "",
-      showList: "전체보기",
+      showList: "전체",
       showCompleted: false, 
       showModal: false,
       createSelectValue: "",
@@ -333,7 +335,8 @@ export default {
         '높음'
       ],
       showListSelect: [
-        '전체목록',
+        '전체',
+        '선택안함',
         '낮음',
         '중간',
         '높음'
@@ -355,17 +358,17 @@ export default {
       todoItems: [],
 
       lowFontStyle: {
-        'fontColor': 'red',
-        'fontWeight': '200',
+        'fontColor': '#333',
+        'fontWeight': '600',
       },
       
       middleFontStyle: {
-        'fontColor': 'green',
+        'fontColor': '#333',
         'fontWeight': '700',
       },
 
       highFontStyle: {
-        'fontColor': 'blue',
+        'fontColor': '#333',
         'fontWeight': '900',
       },
 
@@ -374,7 +377,7 @@ export default {
   },
   computed: {
     importanceList() {
-      return todoItem => (this.showList == '전체보기' ||  todoItem.importance == this.showList) && todoItem.completed == false;
+      return todoItem => (this.showList == '전체' ||  todoItem.importance == this.showList) && todoItem.completed == false;
     },
 
     completedList() {
@@ -604,15 +607,15 @@ export default {
   }
 
   .bgcolorGreen {
-    background: green;
+    background: #98fb9881;
   }
 
   .bgcolorYellow {
-    background-color: yellow;
+    background-color: #FFFACD;
   }
 
   .bgcolorRed {
-    background-color: red;
+    background-color: #f8cdd4;
   }
   
   .updataTable {
